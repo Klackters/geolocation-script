@@ -3,13 +3,12 @@ var cidade = "";
 
   //TODO: separate "fetch user city" and "store it into a cookie" in different functions.
 
-async function fetchCity(){
+function fetchCity(){
 
   fetch('https://geo.ipify.org/api/v1?apiKey=at_fxWAhg0RvfkDmduO07PzPDZpTm8hJ')
     .then(response => response.json())
     .then(data => {
       var city = data.location.city;
-      alert("Cidade: " + city);
       $('#city').html(data.location.city);
 
       document.cookie = `Cidade=${data.location.city}`;
@@ -26,7 +25,7 @@ fetchCity();
 
 console.log(cidade);
 
-// On submit event, use link and numer of posts per page to create a table with all the blog posts.
+// On submit event, use link and number of posts per page to create a table with all the blog posts.
 $('#form').submit((e) => {
   e.preventDefault()
 
@@ -36,6 +35,7 @@ $('#form').submit((e) => {
 
   getBlogPosts(url, number)
 })
+
 
 // Refresh the numer of posts per page once the user changes it.
 $("#number").change((e) => {
