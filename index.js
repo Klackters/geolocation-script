@@ -1,10 +1,28 @@
-// Get user geolocation (latitude and longitude).
-navigator.geolocation.getCurrentPosition(function(position) {
-    var latitude = position.coords.latitude;
-    var longitude = position.coords.longitude;
-    console.log("Latitude: " + latitude + " Longitude: " + longitude);
+// Fetch user city and stores it into the cookie "Cidade".
+var cidade = "";
 
-  });
+async function fetchCity(){
+
+  fetch('https://geo.ipify.org/api/v1?apiKey=at_fxWAhg0RvfkDmduO07PzPDZpTm8hJ')
+    .then(response => response.json())
+    .then(data => {
+      var city = data.location.city;
+      alert("Cidade: " + city);
+      $('#city').html(data.location.city);
+
+      document.cookie = `Cidade=${data.location.city}`;
+      console.log('Cidade:', city);
+
+      cidade = Cookies.get('Cidade');
+
+    })
+    .catch(error => console.error(error));
+    
+}
+
+fetchCity();
+
+console.log(cidade);
 
 // On submit event, use link and numer of posts per page to create a table with all the blog posts.
 $('#form').submit((e) => {

@@ -6,8 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wordpress REST API Geolocation Function</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+  <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+
+
 </head>
 <body>
+
   <div class="container">
     <h1 class="text-center">
       Wordpress List of All Blog Posts
@@ -39,10 +47,18 @@
       </table>
     </div>
   </div>
+
+    <div id="cidade">City: <span id="city"></span></div>
+
+
 </body>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
-<script src="./index.js"></script>
+<script src="
+https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js
+"></script>
+
+<script type="text/javascript" src="./index.js"></script>
 
 </html>
