@@ -1,6 +1,8 @@
 // Fetch user city and stores it into the cookie "Cidade".
 var cidade = "";
 
+  //TODO: separate "fetch user city" and "store it into a cookie" in different functions.
+
 async function fetchCity(){
 
   fetch('https://geo.ipify.org/api/v1?apiKey=at_fxWAhg0RvfkDmduO07PzPDZpTm8hJ')
@@ -17,7 +19,7 @@ async function fetchCity(){
 
     })
     .catch(error => console.error(error));
-    
+
 }
 
 fetchCity();
