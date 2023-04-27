@@ -1,0 +1,3 @@
+.container, .result {
+  width: calc(100% - 10%);
+}
