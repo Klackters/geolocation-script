@@ -1,43 +1,16 @@
-// Fetch user city and stores it into the cookie "Cidade".
-var cidade = "";
-
-  //TODO: separate "fetch user city" and "store it into a cookie" in different functions.
-
-function fetchCity(){
-
-  fetch('https://geo.ipify.org/api/v1?apiKey=at_fxWAhg0RvfkDmduO07PzPDZpTm8hJ')
-    .then(response => response.json())
-    .then(data => {
-      var city = data.location.city;
-      $('#city').html(data.location.city);
-
-      document.cookie = `Cidade=${data.location.city}`;
-      console.log('Cidade:', city);
-
-      cidade = Cookies.get('Cidade');
-
-    })
-    .catch(error => console.error(error));
-
-}
-
-fetchCity();
-
-console.log(cidade);
-
-// On submit event, use link and number of posts per page to create a table with all the blog posts.
+// On button submit event, use link and number of posts per page to create a table with all the blog posts
 $('#form').submit((e) => {
   e.preventDefault()
 
   var url = $('#url').val()
-
   var number = $("#number").val()
 
   getBlogPosts(url, number)
+
 })
 
 
-// Refresh the numer of posts per page once the user changes it.
+// Refresh the number of posts per page once the user changes it.
 $("#number").change((e) => {
   number = $(this).val()
 })
@@ -64,4 +37,35 @@ function getBlogPosts(url, number) {
     }
   })
 }
+
+// Fetch user city and stores it into the cookie "Cidade".
+var cidade = "";
+
+  //TODO: separate "fetch user city" and "store it into a cookie" in different functions.
+
+function fetchCity(){
+
+  fetch('https://geo.ipify.org/api/v1?apiKey=at_fxWAhg0RvfkDmduO07PzPDZpTm8hJ')
+    .then(response => response.json())
+    .then(data => {
+      var cidade = data.location.city;
+      $('#city').html(data.location.city);
+
+      document.cookie = `Cidade=${data.location.city}`;
+
+      cidade = Cookies.get('Cidade');
+      console.log('Cidade:', cidade);
+
+      // Compares user city to city category
+      const urlParams = new URLSearchParams(window.location.search);
+      const myParam = urlParams.get(`${cidade.toLowerCase()}`);
+      
+
+
+    })
+    .catch(error => console.error(error));
+
+}
+
+fetchCity();
 
