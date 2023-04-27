@@ -1,3 +1,4 @@
+// Get user geolocation (latitude and longitude).
 navigator.geolocation.getCurrentPosition(function(position) {
     var latitude = position.coords.latitude;
     var longitude = position.coords.longitude;
@@ -5,6 +6,7 @@ navigator.geolocation.getCurrentPosition(function(position) {
 
   });
 
+// On submit event, use link and numer of posts per page to create a table with all the blog posts.
 $('#form').submit((e) => {
   e.preventDefault()
 
@@ -15,10 +17,12 @@ $('#form').submit((e) => {
   getBlogPosts(url, number)
 })
 
+// Refresh the numer of posts per page once the user changes it.
 $("#number").change((e) => {
   number = $(this).val()
 })
 
+// Create the table dynamically with the blog posts.
 function getBlogPosts(url, number) {
   $("#data").html('')
   $.ajax({
