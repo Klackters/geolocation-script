@@ -1,26 +1,30 @@
+
+
 // On button submit event, use link and number of posts per page to create a table with all the blog posts
 $('#form').submit((e) => {
   e.preventDefault()
 
-  var url = $('#url').val()
-  var number = $("#number").val()
+  // var url = $('#url').val()
+  // var number = $("#number").val()
 
-  getBlogPosts(url, number)
+  // getBlogPosts(url, number)
+
+  fetchCity();
 
 })
 
 
-// Refresh the number of posts per page once the user changes it.
+// Refresh the number of posts per page once the user changes it
 $("#number").change((e) => {
   number = $(this).val()
 })
 
-// Create the table dynamically with the blog posts.
-function getBlogPosts(url, number) {
+// Create the table dynamically with the blog posts sorted by the user's region
+function getBlogPosts(id) {
   $("#data").html('')
   $.ajax({
     method: "GET",
-    url: `https://${url}/wp-json/wp/v2/posts?_fields[]=title&_fields[]=link&_fields[]=date&per_page=${number}`,
+    url: `https://policialpadrao.dmxdesign.com.br/wp-json/wp/v2/posts?categories=${id}`,
     success:function(data) {
       console.log(data)
 
@@ -38,34 +42,37 @@ function getBlogPosts(url, number) {
   })
 }
 
+// Search for the category ID by it's slug
+function searchCategoryID(slug) {
+  $.ajax({
+    url: `https://policialpadrao.dmxdesign.com.br/wp-json/wp/v2/categories?slug=${slug}`,
+    method: 'GET',
+    success: function (data) {
+        var id = data[0].id;
+        getBlogPosts(id);
+    }
+});
+}
+
+
+
 // Fetch user city and stores it into the cookie "Cidade".
-var cidade = "";
 
   //TODO: separate "fetch user city" and "store it into a cookie" in different functions.
 
-function fetchCity(){
+var cidade;
 
-  fetch('https://geo.ipify.org/api/v1?apiKey=at_fxWAhg0RvfkDmduO07PzPDZpTm8hJ')
-    .then(response => response.json())
-    .then(data => {
-      var cidade = data.location.city;
-      $('#city').html(data.location.city);
+async function fetchCity(){
+  const response = await fetch('https://geo.ipify.org/api/v1?apiKey=at_fxWAhg0RvfkDmduO07PzPDZpTm8hJ');
+  const data = await response.json();
+  
+  cidade = data.location.city;
+  
+  $('#city').html(cidade);
+  
+  document.cookie = `Cidade=${cidade}`;
+  
+  console.log("Cidade:", cidade);
 
-      document.cookie = `Cidade=${data.location.city}`;
-
-      cidade = Cookies.get('Cidade');
-      console.log('Cidade:', cidade);
-
-      // Compares user city to city category
-      const urlParams = new URLSearchParams(window.location.search);
-      const myParam = urlParams.get(`${cidade.toLowerCase()}`);
-      
-
-
-    })
-    .catch(error => console.error(error));
-
+  searchCategoryID(cidade);
 }
-
-fetchCity();
-
