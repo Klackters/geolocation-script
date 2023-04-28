@@ -1,5 +1,3 @@
-
-
 // On button submit event, use link and number of posts per page to create a table with all the blog posts
 $('#form').submit((e) => {
   e.preventDefault()
@@ -24,7 +22,7 @@ function getBlogPosts(id) {
   $("#data").html('')
   $.ajax({
     method: "GET",
-    url: `https://policialpadrao.dmxdesign.com.br/wp-json/wp/v2/posts?categories=${id}`,
+    url: `https://policialpadrao.dmxdesign.com.br/wp-json/wp/v2/posts?categories=${id}&per_page=5`,
     success:function(data) {
       console.log(data)
 
