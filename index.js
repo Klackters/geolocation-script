@@ -1,20 +1,10 @@
+var cidade;
+
+
 // On button submit event, use link and number of posts per page to create a table with all the blog posts
 $('#form').submit((e) => {
   e.preventDefault()
-
-  // var url = $('#url').val()
-  // var number = $("#number").val()
-
-  // getBlogPosts(url, number)
-
   fetchCity();
-
-})
-
-
-// Refresh the number of posts per page once the user changes it
-$("#number").change((e) => {
-  number = $(this).val()
 })
 
 // Create the table dynamically with the blog posts sorted by the user's region
@@ -27,12 +17,18 @@ function getBlogPosts(id) {
       console.log(data)
 
       data.forEach(post => {
-        $("#data").append(`
+        $("#news-section").append(`
         
-        <tr>
-          <td><a href="${post.link}" target="_blank">${post.title.rendered}</a></td>
-          <td>${post.date}</td>
-          </tr>
+        <div class="news-item">
+          <a href="${post.link}" target="_blank">
+            <img src="${post.jetpack_featured_media_url}" alt="${post.title.rendered}">
+          </a>
+          <div class="news-content">
+            <h3><a href="${post.link}" target="_blank">${post.title.rendered}</a></h3>
+            <p>${post.excerpt.rendered}</p>
+            <a href="${post.link}" target="_blank" class="read-more">Leia mais</a>
+          </div>
+        </div>
 
         `)
       });
@@ -55,10 +51,6 @@ function searchCategoryID(slug) {
 
 
 // Fetch user city and stores it into the cookie "Cidade".
-
-  //TODO: separate "fetch user city" and "store it into a cookie" in different functions.
-
-var cidade;
 
 async function fetchCity(){
   const response = await fetch('https://geo.ipify.org/api/v1?apiKey=at_fxWAhg0RvfkDmduO07PzPDZpTm8hJ');
