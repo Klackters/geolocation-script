@@ -8,31 +8,34 @@ $('#form').submit((e) => {
 
 // Create the table dynamically with the blog posts sorted by the user's region
 function getBlogPosts(id) {
-  $("#data").html('')
+  $("#data").html('');
   $.ajax({
     method: "GET",
-    url: `https://policialpadrao.dmxdesign.com.br/wp-json/wp/v2/posts?categories=${id}&per_page=5`,
+    url: `https://policialpadrao.dmxdesign.com.br/wp-json/wp/v2/posts?categories=${id}&per_page=5&_embed`,
     success:function(data) {
-      console.log(data)
+      console.log(data);
 
       data.forEach(post => {
+        const postImage = post._embedded['wp:featuredmedia'][0].source_url || 'https://via.placeholder.com/150';
+        const categoryName = post._embedded['wp:term'][0][0].name;
         $("#news-section").append(`
         
         <div class="news-item">
           <a href="${post.link}" target="_blank">
-            <img src="${post.jetpack_featured_media_url}" alt="${post.title.rendered}">
+            <img src="${postImage}" alt="${post.title.rendered}">
           </a>
           <div class="news-content">
             <h3><a href="${post.link}" target="_blank">${post.title.rendered}</a></h3>
             <p>${post.excerpt.rendered}</p>
+            <p><strong></strong> ${categoryName}</p>
             <a href="${post.link}" target="_blank" class="read-more">Leia mais</a>
           </div>
         </div>
 
-        `)
+        `);
       });
     }
-  })
+  });
 }
 
 // Search for the category ID by it's slug
