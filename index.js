@@ -1,6 +1,5 @@
 var cidade;
 
-
 // On button submit event, use link and number of posts per page to create a table with all the blog posts
 $('#form').submit((e) => {
   e.preventDefault()
