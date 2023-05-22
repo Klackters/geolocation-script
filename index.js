@@ -11,7 +11,7 @@ function getBlogPosts(id) {
   $("#data").html('');
   $.ajax({
     method: "GET",
-    url: `https://policialpadrao.dmxdesign.com.br/wp-json/wp/v2/posts?categories=${id}&per_page=5&_embed`,
+    url: `https://policialpadrao.com.br/wp-json/wp/v2/posts?categories=${id}&per_page=5&_embed`,
     success:function(data) {
       console.log(data);
 
@@ -41,7 +41,7 @@ function getBlogPosts(id) {
 // Search for the category ID by it's slug
 function searchCategoryID(slug) {
   $.ajax({
-    url: `https://policialpadrao.dmxdesign.com.br/wp-json/wp/v2/categories?slug=${slug}`,
+    url: `https://policialpadrao.com.br/wp-json/wp/v2/categories?slug=${slug}`,
     method: 'GET',
     success: function (data) {
         var id = data[0].id;
