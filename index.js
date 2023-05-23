@@ -3,6 +3,8 @@ var cidade;
 var contadorRegiaoDeCampinas = 0;
 var contadorRegiaoDePiracicaba = 0;
 
+var postsExclude = [];
+
 const cidadesRegiaoCampinas = [
   'AMERICANA',
   'ARTUR NOGUEIRA',
@@ -62,6 +64,7 @@ $('#form').submit((e) => {
 // Create the table dynamically with the blog posts sorted by the user's region
 function getBlogPosts(id) {
   $("#data").html('');
+  var postsId = [];
   $.ajax({
     method: "GET",
     url: `https://policialpadrao.com.br/wp-json/wp/v2/posts?categories=${id}&per_page=5&_embed`,
@@ -90,7 +93,14 @@ function getBlogPosts(id) {
   `;
 
         $(columnSelector).append(columnContent);
+
+        postsId.push(post.id);
+
       });
+
+      console.log("IDs dos posts:", postsId);
+      postsExclude = postsId;
+
     }
   });
 
