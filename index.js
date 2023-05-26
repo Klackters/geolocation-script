@@ -144,7 +144,3 @@ async function fetchCity() {
 
   searchCategoryID(cidade);
 }
-
-function regionCounter() {
-
-}

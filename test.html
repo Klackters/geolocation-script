@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC0byff37xRbOlSAhIbW_jSTjiOr6owamM&libraries=places"></script>
+</head>
+
+<body>
+
+
+  <div class="container">
+    <div id="news-section">
+      <div class="column col-1"></div>
+      <div class="column col-2"></div>
+      <div class="column col-3"></div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+  <script type="text/javascript">
+
+    var cidade;
+
+    var contadorRegiaoDeCampinas = 0;
+    var contadorRegiaoDePiracicaba = 0;
+
+    var postsExclude = [];
+
+    const cidadesRegiaoCampinas = [
+      'AMERICANA',
+      'ARTUR NOGUEIRA',
+      'CAMPINAS',
+      // Restante das cidades da Região de Campinas
+    ];
+
+    const cidadesRegiaoPiracicaba = [
+      'ÁGUAS DE SÃO PEDRO',
+      'ANALÂNDIA',
+      'ARARAS',
+      // Restante das cidades da Região de Piracicaba
+    ];
+
+    // On button submit event, use link and number of posts per page to create a table with all the blog posts
+    $('#form').submit((e) => {
+      e.preventDefault()
+      fetchCity();
+    })
+
+    function getLastPostsWithoutId() {
+
+      $("#data").html('');
+      var postsId = [];
+      $.ajax({
+        method: "GET",
+        url: `https://policialpadrao.com.br/wp-json/wp/v2/posts?exclude=5146&per_page=5&_embed`,
+        success: function (data) {
+          console.log(data);
+          console.log("Sem ID da categoria, últimos 5 posts retornados")
+
+          if (data && data.length > 0) {
+            data.forEach((post, index) => {
+              const postImage = post._embedded['wp:featuredmedia'][0].source_url || 'https://via.placeholder.com/150';
+              const categoryName = post._embedded['wp:term'][0][0].name;
+              const postDate = moment(post.date).format('DD/MM/YYYY');
+
+              const columnClass = (index === 1 || index === 2) ? 'col-1' : (index === 3 || index === 4) ? 'col-3' : 'col-2';
+
+              const columnSelector = `.column.${columnClass}`;
+
+              const columnContent = `
+                <div class="news-item">
+                  <a href="${post.link}" target="_blank">
+                    <img src="${postImage}" alt="${post.title.rendered}">
+                  </a>
+                  <div class="news-content">
+                    <p><strong></strong> ${categoryName}</p>
+                    <h3><a href="${post.link}" target="_blank">${post.title.rendered}</a></h3>
+                    <p>${post.excerpt.rendered}</p>
+                    <p class='post-date-geolocatio'>Publicado em ${postDate}</p>
+                  </div>
+                </div>
+              `;
+
+              $(columnSelector).append(columnContent);
+
+            });
+
+          } else {
+            console.log("Nenhum dado retornado.");
+          }
+        }
+      });
+
+
+
+    }
+
+    // Create the table dynamically with the blog posts sorted by the user's region
+    function getBlogPosts(id) {
+      console.log("O ID de categoria a ser requisitado é: ", id)
+      $("#data").html('');
+      var postsId = [];
+      $.ajax({
+        method: "GET",
+        url: `https://policialpadrao.com.br/wp-json/wp/v2/posts?categories=${id}&per_page=5&_embed`,
+        success: function (data) {
+          console.log(data);
+          console.log("ID da categoria: ", id)
+
+          if (data && data.length > 0) {
+            data.forEach((post, index) => {
+              const postImage = post._embedded['wp:featuredmedia'][0].source_url || 'https://via.placeholder.com/150';
+              const categoryName = post._embedded['wp:term'][0][0].name;
+              const postDate = moment(post.date).format('DD/MM/YYYY');
+
+              const columnClass = (index === 1 || index === 2) ? 'col-1' : (index === 3 || index === 4) ? 'col-3' : 'col-2';
+
+              const columnSelector = `.column.${columnClass}`;
+
+              const columnContent = `
+                <div class="news-item">
+                  <a href="${post.link}" target="_blank">
+                    <img src="${postImage}" alt="${post.title.rendered}">
+                  </a>
+                  <div class="news-content">
+                    <p><strong></strong> ${categoryName}</p>
+                    <h3><a href="${post.link}" target="_blank">${post.title.rendered}</a></h3>
+                    <p>${post.excerpt.rendered}</p>
+                    <p class='post-date-geolocatio'>Publicado em ${postDate}</p>
+                  </div>
+                </div>
+              `;
+
+              $(columnSelector).append(columnContent);
+
+              postsId.push(post.id);
+            });
+
+            console.log("IDs dos posts:", postsId);
+            postsExclude = postsId;
+          } else {
+            console.log("Nenhum dado retornado.");
+          }
+        }
+      });
+
+      if (cidadesRegiaoCampinas.includes(cidade.toUpperCase())) {
+        contadorRegiaoDeCampinas = 5;
+        console.log("Posts relacionados à Região de Campinas: ", contadorRegiaoDeCampinas);
+      } else if (cidadesRegiaoPiracicaba.includes(cidade.toUpperCase())) {
+        contadorRegiaoDePiracicaba = 5;
+        console.log("Posts relacionados à Região de Piracicaba: ", contadorRegiaoDePiracicaba);
+      }
+    }
+
+    // Search for the category ID by its slug
+    function searchCategoryID(cidade) {
+
+      if (!cidade) {
+
+        $.ajax({
+          url: `https://policialpadrao.com.br/wp-json/wp/v2/categories?slug=${cidade}`,
+          method: 'GET',
+          success: function (data) {
+            if (data && data.length > 0) {
+              var id = data[0].id;
+            } else {
+              console.log("Nenhum ID de categoria encontrado para a cidade: " + cidade);
+            }
+          }
+        });
+
+      } if (cidade) {
+
+        $.ajax({
+          url: `https://policialpadrao.com.br/wp-json/wp/v2/categories?slug=${cidade}`,
+          method: 'GET',
+          success: function (data) {
+            if (data && data.length > 0) {
+              var id = data[0].id;
+              getBlogPosts(id);
+            } else {
+              console.log("Nenhum ID de categoria encontrado para a cidade: " + cidade);
+            }
+          }
+        });
+
+      }
+
+
+    }
+
+    // Fetch user city and stores it into the cookie "Cidade".
+    async function fetchCity() {
+
+      var cidadeCookie = Cookies.get('cidade');
+      console.log("Cookie armazenado", cidadeCookie);
+
+      if (!cidadeCookie) {
+
+        console.log("API da Google FOI utilizada")
+
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function (position) {
+            var geocoder = new google.maps.Geocoder();
+            var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+            geocoder.geocode({ 'latLng': latLng }, function (results, status) {
+              if (status == google.maps.GeocoderStatus.OK) {
+                if (results[0]) {
+                  cidade = results[0].address_components[3].long_name;
+
+                  Cookies.set('cidade', cidade);
+
+                  searchCategoryID(cidade);
+
+                } else {
+                  console.log("Nenhum resultado encontrado.");
+                }
+              } else {
+                console.log("Geocoder falhou devido a: " + status);
+              }
+            });
+          }, function (error) {
+            console.log("Erro ao obter a localização: " + error.message);
+            getLastPostsWithoutId();
+          });
+        }
+      } else {
+        console.log("API da Google NÃO FOI utilizada")
+        cidade = cidadeCookie;
+        searchCategoryID(cidade);
+      }
+    }
+
+    fetchCity()
+  </script>
+</body>
+
+</html>
