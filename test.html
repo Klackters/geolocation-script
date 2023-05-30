@@ -51,11 +51,11 @@
       fetchCity();
     })
 
-    function getLastPostsWithoutId() {
+    async function getLastPostsWithoutId() {
 
       $("#data").html('');
       var postsId = [];
-      $.ajax({
+      await $.ajax({
         method: "GET",
         url: `https://policialpadrao.com.br/wp-json/wp/v2/posts?exclude=5146&per_page=5&_embed`,
         success: function (data) {
@@ -74,12 +74,12 @@
 
               const columnContent = `
                 <div class="news-item">
-                  <a href="${post.link}" target="_blank">
+                  <a href="${post.link}">
                     <img src="${postImage}" alt="${post.title.rendered}">
                   </a>
                   <div class="news-content">
                     <p><strong></strong> ${categoryName}</p>
-                    <h3><a href="${post.link}" target="_blank">${post.title.rendered}</a></h3>
+                    <h3><a href="${post.link}" >${post.title.rendered}</a></h3>
                     <p>${post.excerpt.rendered}</p>
                     <p class='post-date-geolocatio'>Publicado em ${postDate}</p>
                   </div>
@@ -88,7 +88,11 @@
 
               $(columnSelector).append(columnContent);
 
+              
+
             });
+
+            addAdvertisement();
 
           } else {
             console.log("Nenhum dado retornado.");
@@ -96,7 +100,7 @@
         }
       });
 
-
+      
 
     }
 
@@ -124,12 +128,12 @@
 
               const columnContent = `
                 <div class="news-item">
-                  <a href="${post.link}" target="_blank">
+                  <a href="${post.link}">
                     <img src="${postImage}" alt="${post.title.rendered}">
                   </a>
                   <div class="news-content">
                     <p><strong></strong> ${categoryName}</p>
-                    <h3><a href="${post.link}" target="_blank">${post.title.rendered}</a></h3>
+                    <h3><a href="${post.link}">${post.title.rendered}</a></h3>
                     <p>${post.excerpt.rendered}</p>
                     <p class='post-date-geolocatio'>Publicado em ${postDate}</p>
                   </div>
@@ -139,7 +143,12 @@
               $(columnSelector).append(columnContent);
 
               postsId.push(post.id);
+
+              
+
             });
+
+            addAdvertisement();
 
             console.log("IDs dos posts:", postsId);
             postsExclude = postsId;
@@ -156,6 +165,9 @@
         contadorRegiaoDePiracicaba = 5;
         console.log("Posts relacionados à Região de Piracicaba: ", contadorRegiaoDePiracicaba);
       }
+
+      
+
     }
 
     // Search for the category ID by its slug
@@ -217,7 +229,7 @@
             console.log("API da Google FOI utilizada")
 
 
-            
+
 
 
 
@@ -230,7 +242,7 @@
             geocoder.geocode({ 'latLng': latLng }, function (results, status) {
               if (status == google.maps.GeocoderStatus.OK) {
 
-                
+
 
                 if (results[0]) {
                   cidade = results[0].address_components[3].long_name;
@@ -240,11 +252,11 @@
                   clearHTML();
 
                   searchCategoryID(cidade);
-                  
 
-                
 
-                  
+
+
+
 
                 } else {
                   console.log("Nenhum resultado encontrado.");
@@ -273,11 +285,33 @@
         targetContainer1.innerHTML = '';
         targetContainer2.innerHTML = '';
         targetContainer3.innerHTML = '';
-        
+
       }
     }
 
     fetchCity()
+
+    $(document).ready(function () {
+      $('.news-item').hover(
+        function () {
+          $(this).find('h3').addClass('hovered');
+        },
+        function () {
+          $(this).find('h3').removeClass('hovered');
+        }
+      );
+    });
+
+  function addAdvertisement() {
+      const columnSelector = '.column.col-3';
+      const adContent = `
+        <div style="max-width:300px; width:100%; height:250px;">
+          <iframe src="https://policial.dmxdesign.com.br?_dnid=19392&t=1685463841" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe>
+        </div>
+      `;
+      $(columnSelector).append(adContent);
+    }
+
   </script>
 </body>
 
