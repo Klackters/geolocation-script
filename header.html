@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC0byff37xRbOlSAhIbW_jSTjiOr6owamM&libraries=places"></script>
+
+</head>
+<body>
+  
+</body>
+</html>
+
+<script>
+
+  async function fetchCity() {
+
+    var cidadeCookie = Cookies.get('cidade');
+    console.log("Cookie armazenado", cidadeCookie);
+
+    if (!cidadeCookie) {
+
+      if (navigator.geolocation) {
+
+        navigator.geolocation.getCurrentPosition(async function (position) {
+
+          console.log("API da Google FOI utilizada");
+
+          var geocoder = new google.maps.Geocoder();
+          var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+          geocoder.geocode({ 'latLng': latLng }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+
+              if (results[0]) {
+                cidade = results[0].address_components[3].long_name;
+                Cookies.set('cidade', cidade);
+              } else {
+                console.log("Nenhum resultado encontrado.");
+              }
+            } else {
+              console.log("Geocoder falhou devido a: " + status);
+            }
+          });
+        }, function (error) {
+          console.log("Erro ao obter a localização: " + error.message);
+        });
+      }
+    } else {
+      console.log("API da Google NÃO FOI utilizada")
+      cidade = cidadeCookie;
+    }
+  }
+
+</script>
