@@ -179,9 +179,7 @@
 
     // Search for the category ID by its slug
     function searchCategoryID() {
-
       console.log(`searchCategoryID() [${cidade}]`)
-
       $.ajax({
         url: `https://policialpadrao.com.br/wp-json/wp/v2/categories?slug=${cidade}`,
         method: 'GET',
@@ -196,51 +194,6 @@
       });
     }
 
-    // Fetch user city and stores it into the cookie "cidade".
-    // async function fetchCity() {
-
-    //   var cidadeCookie = Cookies.get('cidade');
-    //   console.log("Cookie armazenado", cidadeCookie);
-
-    //   if (!cidadeCookie) {
-
-    //     getLastPostsWithoutId();
-
-    //     if (navigator.geolocation) {
-
-    //       navigator.geolocation.getCurrentPosition(async function (position) {
-
-    //         console.log("API da Google FOI utilizada");
-
-    //         var geocoder = new google.maps.Geocoder();
-    //         var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-    //         geocoder.geocode({ 'latLng': latLng }, function (results, status) {
-    //           if (status == google.maps.GeocoderStatus.OK) {
-
-    //             if (results[0]) {
-    //               cidade = results[0].address_components[3].long_name;
-    //               Cookies.set('cidade', cidade);
-    //               clearHTML();
-    //               searchCategoryID(cidade);
-    //             } else {
-    //               console.log("Nenhum resultado encontrado.");
-    //             }
-    //           } else {
-    //             console.log("Geocoder falhou devido a: " + status);
-    //           }
-    //         });
-    //       }, function (error) {
-    //         console.log("Erro ao obter a localização: " + error.message);
-    //       });
-    //     }
-    //   } else {
-    //     console.log("API da Google NÃO FOI utilizada")
-    //     cidade = cidadeCookie;
-    //     searchCategoryID(cidade);
-    //   }
-    // }
-
     function clearHTML() {
       var targetContainer1 = document.querySelector('.col-1');
       var targetContainer2 = document.querySelector('.col-2');
@@ -250,28 +203,9 @@
         targetContainer1.innerHTML = '';
         targetContainer2.innerHTML = '';
         targetContainer3.innerHTML = '';
-
       }
-
       searchCategoryID();
-
     }
-
-    ///////////////////////////////////////////////////////////////////
-
-
-
-    if (!cidade) {
-      getLastPostsWithoutId();
-    } else {
-      clearHTML();
-    }
-
-    ///////////////////////////////////////////////////////////////////
-
-
-
-    // fetchCity()
 
     $(document).ready(function () {
       $('.news-item').hover(
@@ -290,6 +224,12 @@
         <div style="max-width:300px; width:100%; height:250px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19492&t=1685545151" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
       `;
       $(columnSelector).append(adContent);
+    }
+
+    if (!cidade) {
+      getLastPostsWithoutId();
+    } else {
+      clearHTML();
     }
 
   </script>
