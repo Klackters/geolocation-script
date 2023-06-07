@@ -1,531 +1,306 @@
 <body>
+  <div id="papoespecialista-banner"></div>
+  <script>
 
+    // Renderiza o banner sem cidade específica quando o usuário acessa a página sem acesso à localização
+    function addAdvertisementSquarePapoEspecialistaSemCidade() {
+      const bannerSelectorSquarePapoEspecialista = document.getElementById('papoespecialista-banner');
 
-  <div class="container">
-    <div id="news-section">
-      <div class="column col-1"></div>
-      <div class="column col-2"></div>
-      <div class="column col-3"></div>
-    </div>
-  </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-
-  <script type="text/javascript">
-
-    var postsExclude = [];
-
-    const cidadesRegiaoCampinas = [
-      'AMERICANA',
-      'ARTUR NOGUEIRA',
-      'CAMPINAS',
-      'COSMÓPOLIS',
-      'ENGENHEIRO COELHO',
-      'HOLAMBRA',
-      'HORTOLÂNDIA',
-      'INDAIATUBA',
-      'ITATIBA',
-      'JAGUARIÚNA',
-      'MONTE MOR',
-      'MORUNGABA',
-      'NOVA ODESSA',
-      'PAULÍNIA',
-      'PEDREIRA',
-      "SANTA BÁRBARA D'OESTE",
-      'SANTO ANTÔNIO DE POSSE',
-      'SUMARÉ',
-      'VALINHOS',
-      'VINHEDO'
-    ];
-
-    const cidadesRegiaoPiracicaba = [
-      'ÁGUAS DE SÃO PEDRO',
-      'ANALÂNDIA',
-      'ARARAS',
-      'CAPIVARI',
-      'CHARQUEADA',
-      'CONCHAL',
-      'CORDEIRÓPOLIS',
-      'CORUMBATAÍ',
-      'ELIAS FAUSTO',
-      'IPEÚNA',
-      'IRACEMÁPOLIS',
-      'LEME',
-      'LIMEIRA',
-      'MOMBUCA',
-      'PIRACICABA',
-      'PIRASSUNUNGA',
-      'RAFARD',
-      'RIO CLARO',
-      'RIO DAS PEDRAS',
-      'SALTINHO',
-      'SANTA CRUZ DA CONCEIÇÃO',
-      'SANTA GERTRUDES',
-      'SANTA MARIA DA SERRA',
-      'SÃO PEDRO'
-    ];
-
-    // Cria uma tabela dinamicamente com os 5 últimos posts do site, excluindo os posts da categoria "PAPO DE ESPECIALISTA"
-    async function getLastPostsWithoutId() {
-      $("#data").html('');
-      var postsId = [];
-      await $.ajax({
-        method: "GET",
-        url: `https://policialpadrao.com.br/wp-json/wp/v2/posts?exclude=5146&per_page=5&_embed`,
-        success: function (data) {
-          console.log(data);
-          console.log("Sem ID da categoria, últimos 5 posts retornados")
-
-          if (data && data.length > 0) {
-            data.forEach((post, index) => {
-              const postImage = post._embedded['wp:featuredmedia'][0].source_url || 'https://via.placeholder.com/150';
-              const categoryName = post._embedded['wp:term'][0][0].name;
-              const postDate = moment(post.date).format('DD/MM/YYYY');
-
-              const columnClass = (index === 1 || index === 2) ? 'col-1' : (index === 3 || index === 4) ? 'col-3' : 'col-2';
-
-              const columnSelector = `.column.${columnClass}`;
-
-              const columnContent = `
-                <div class="news-item">
-                  <a href="${post.link}">
-                    <img src="${postImage}" alt="${post.title.rendered}">
-                  </a>
-                  <div class="news-content">
-                    <p><strong></strong> ${categoryName}</p>
-                    <h3><a href="${post.link}" >${post.title.rendered}</a></h3>
-                    <p>${post.excerpt.rendered}</p>
-                    <p class='post-date-geolocatio'>Publicado em ${postDate}</p>
-                  </div>
-                </div>
-              `;
-              $(columnSelector).append(columnContent);
-            });
-            addAdvertisementWithoutId();
-          } else {
-            console.log("Nenhum dado retornado.");
-          }
-        }
-      });
-    }
-
-    // Cria uma tabela dinamicamente com base no retorno da requisição da API com os 5 últimos posts baseados na localização do usuário
-    function getBlogPosts(id) {
-      console.log("O ID de categoria a ser requisitado é: ", id)
-      $("#data").html('');
-      var postsId = [];
-      $.ajax({
-        method: "GET",
-        url: `https://policialpadrao.com.br/wp-json/wp/v2/posts?categories=${id}&per_page=5&_embed`,
-        success: function (data) {
-          console.log(data);
-          console.log("ID da categoria: ", id)
-
-          if (data && data.length > 0) {
-
-            data.forEach((post, index) => {
-              const postImage = post._embedded['wp:featuredmedia'][0].source_url || 'https://via.placeholder.com/150';
-              const categoryName = post._embedded['wp:term'][0][0].name;
-              const postDate = moment(post.date).format('DD/MM/YYYY');
-
-              const columnClass = (index === 1 || index === 2) ? 'col-1' : (index === 3 || index === 4) ? 'col-3' : 'col-2';
-
-              const columnSelector = `.column.${columnClass}`;
-
-              const columnContent = `
-                <div class="news-item">
-                  <a href="${post.link}">
-                    <img src="${postImage}" alt="${post.title.rendered}">
-                  </a>
-                  <div class="news-content">
-                    <p><strong></strong> ${categoryName}</p>
-                    <h3><a href="${post.link}">${post.title.rendered}</a></h3>
-                    <p>${post.excerpt.rendered}</p>
-                    <p class='post-date-geolocatio'>Publicado em ${postDate}</p>
-                  </div>
-                </div>
-              `;
-
-              $(columnSelector).append(columnContent);
-
-              postsId.push(post.id);
-            });
-
-            addAdvertisementSquare();
-
-            console.log("IDs dos posts:", postsId);
-            postsExclude = postsId;
-          } else {
-            console.log("Nenhum dado retornado.");
-          }
-        }
-      });
-
-    }
-
-    // Faz uma requisição para a API do WordPress pedindo o ID de categoria referente à cidade do usuário
-    function searchCategoryID() {
-
-      function removerAcentos(str) {
-        str = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        str = str.replace(/'/g, "");
-        return str;
-      }
-
-      console.log(`searchCategoryID() [${cidade}]`)
-      $.ajax({
-        url: `https://policialpadrao.com.br/wp-json/wp/v2/categories?slug=${removerAcentos(cidade).toLowerCase().replace(/\s+/g, "-")}`,
-        method: 'GET',
-        success: function (data) {
-          if (data && data.length > 0) {
-            var id = data[0].id;
-            getBlogPosts(id);
-          } else {
-            console.log("Nenhum ID de categoria encontrado para a cidade: " + cidade);
-          }
-        }
-      });
-    }
-
-    // Limpa (reseta) a primeira seção de notícias (geolocation)
-    function clearHTML() {
-      var targetContainer1 = document.querySelector('.col-1');
-      var targetContainer2 = document.querySelector('.col-2');
-      var targetContainer3 = document.querySelector('.col-3');
-
-      if (targetContainer1 || targetContainer2 || targetContainer3) {
-        targetContainer1.innerHTML = '';
-        targetContainer2.innerHTML = '';
-        targetContainer3.innerHTML = '';
-      }
-      clearHTMLSquare()
-    }
-
-    // Adiciona classes para animação "border-bottom" dos títulos h3
-    $(document).ready(function () {
-      $('.news-item').hover(
-        function () {
-          $(this).find('h3').addClass('hovered');
-        },
-        function () {
-          $(this).find('h3').removeClass('hovered');
-        }
-      );
-    });
-
-    // Função que é chamada ao carregar a página sem acesso à localização
-    function addAdvertisementWithoutId() {
-      const adContentBannerSquareWithoutId = `
-      <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19688&t=1685985668" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+      adContentBannerSquarePapoEspecialista = `
+      <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19688&t=1686061207" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
       `
 
-      const bannerSelectorSquare = '.col-3';
-      $(bannerSelectorSquare).append(adContentBannerSquareWithoutId);
-      console.log("Banner SQUARE gerado sem cidade específica");
-
+      $(bannerSelectorSquarePapoEspecialista).append(adContentBannerSquarePapoEspecialista);
+      console.log("Banner SQUARE [papo de especialista] gerado sem cidade específica");
     }
 
-    // Limpa (reseta) o banner SQUARE da primera seção (geolocation)
-    function clearHTMLSquare() {
-      const containerSelectorSquare = document.querySelectorAll('.column');
-      $(containerSelectorSquare).empty();
-      searchCategoryID();
-      adBannerRender();
-    }
+    // Limpa (reseta) e renderiza o banner de anúncio referente à cidade do usuário
+    function addAdvertisementSquarePapoEspecialista() {
 
-    // Limpa (reseta) e adiciona o banner SQUARE da primeira seção (geolocation) baseado na cidade do usuário
-    function addAdvertisementSquare() {
+      var adContentBannerSquarePapoEspecialista = ``;
 
-
-      var adContentBannerHeaderSquare = ``;
-
-      // Redefinição da função assim que ela é chamada
-      function addAdvertisementSquare() {
-        const bannerSelectorSquare = '.col-3';
-        $(bannerSelectorSquare).append(adContentBannerHeaderSquare);
-        console.log("Banner SQUARE gerado na cidade: ", cidade)
+      // Redefine a função assim que ela é chamada
+      function addAdvertisementSquarePapoEspecialista() {
+        const bannerSelectorSquarePapoEspecialista = document.getElementById('papoespecialista-banner');
+        $(bannerSelectorSquarePapoEspecialista).empty();
+        $(bannerSelectorSquarePapoEspecialista).append(adContentBannerSquarePapoEspecialista);
+        console.log("Banner SQUARE [papo de especialista] gerado na cidade: ", cidade)
       }
 
-      // Série de verificações para econtrar o bloco que se adequa à cidade do usuário
+      // Série de validações para econtrar o bloco referente à cidade do usuário
       if (cidade.toUpperCase() === "AMERICANA") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19713&t=1685986552" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "ARTUR NOGUEIRA") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19714&t=1685986588" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "CAMPINAS") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19715&t=1685986628" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "COSMÓPOLIS") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19716&t=1685986660" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "ENGENHEIRO COELHO") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19717&t=1685986686" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "HOLAMBRA") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19718&t=1685986713" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "HORTOLÂNDIA") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19719&t=1685986740" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "INDAIATUBA") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19720&t=1685986771" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "ITATIBA") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19721&t=1685986801" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "JAGUARIÚNA") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19722&t=1685986847" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "MONTE MOR") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19723&t=1685986872" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "MORUNGABA") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19724&t=1685986900" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "NOVA ODESSA") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19725&t=1685986928" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "PAULÍNIA") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19726&t=1685986968" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "PEDREIRA") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19727&t=1685986999" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "SANTA BÁRBARA D'OESTE") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19728&t=1685987029" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "SANTO ANTÔNIO DE POSSE") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19729&t=1685987055" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "SUMARÉ") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19730&t=1685987080" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "VALINHOS") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19731&t=1685987108" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "VINHEDO") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19732&t=1685987142" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "ÁGUAS DE SÃO PEDRO") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19797&t=1686058029" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "ANALÂNDIA") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19798&t=1686058056" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "ARARAS") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19799&t=1686058092" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "CAPIVARI") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19800&t=1686058118" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "CHARQUEADA") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19801&t=1686058154" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "CONCHAL") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19802&t=1686058178" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "CORDEIRÓPOLIS") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19803&t=1686058208" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "CORUMBATAÍ") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19804&t=1686058235" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "ELIAS FAUSTO") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19805&t=1686058285" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "IPEÚNA") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19806&t=1686058311" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "IRACEMÁPOLIS") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19807&t=1686058344" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "LEME") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19808&t=1686058377" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "LIMEIRA") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19809&t=1686058406" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "MOMBUCA") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19810&t=1686058430" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "PIRACICABA") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19811&t=1686058485" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "PIRASSUNUNGA") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19812&t=1686058517" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "RAFARD") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19813&t=1686058550" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "RIO CLARO") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19814&t=1686058574" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "RIO DAS PEDRAS") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19815&t=1686058600" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "SALTINHO") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19816&t=1686058632" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "SANTA CRUZ DA CONCEIÇÃO") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19817&t=1686058660" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "SANTA GERTRUDES") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19818&t=1686058688" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "SANTA MARIA DA SERRA") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19819&t=1686058715" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
 
       } else if (cidade.toUpperCase() === "SÃO PEDRO") {
-        adContentBannerHeaderSquare = `
+        adContentBannerSquarePapoEspecialista = `
         <div style="max-width:400px; width:100%; height:400px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19820&t=1686058739" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
-        addAdvertisementSquare(adContentBannerHeaderSquare);
-
+        addAdvertisementSquarePapoEspecialista(adContentBannerSquarePapoEspecialista);
       }
-
-    }
-
-    // Função responsável por transformar o nome da cidade em um slug
-    function removerAcentos(str) {
-      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
     // Execução no DOM
-    if (!cidade) {
-      getLastPostsWithoutId();
+    if (cidade) {
+      addAdvertisementSquarePapoEspecialista();
     } else {
-      clearHTML();
+      addAdvertisementSquarePapoEspecialistaSemCidade();
     }
 
   </script>
+
 </body>

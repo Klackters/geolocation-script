@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+
+  <script>
+
+    // Crie um elemento <iframe>
+    var iframeElement = document.createElement('iframe');
+    iframeElement.src = 'URL_DO_SEU_IFRAME_AQUI';
+    iframeElement.setAttribute('data-ad-client', 'SEU_ID_DO_ADSENSE_AQUI');
+
+    // Defina os atributos do iframe
+    iframeElement.width = '300';  // Defina a largura desejada
+    iframeElement.height = '250'; // Defina a altura desejada
+    iframeElement.frameBorder = '0'; // Remova a borda do iframe
+
+    // Encontre o elemento em que você deseja anexar o iframe (por exemplo, um <div>)
+    var containerElement = document.getElementById('seu-elemento-de-container');
+
+    // Anexe o iframe ao elemento do contêiner
+    containerElement.appendChild(iframeElement);
+
+
+
+  </script>
+
+</body>
+
+</html>

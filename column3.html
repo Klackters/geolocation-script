@@ -1,0 +1,100 @@
+<body>
+    <div id="posts-container-3">
+        <h1>Notícias estaduais</h1>
+    </div>
+    <script>
+        // Função para fazer a requisição AJAX
+        async function fazerRequisicao3() {
+            const postsExclude3 = [36788, 36769, 36748, 36732, 36707]; //Deletar esta linha quando implementar no ambiente de testes...
+            const excludedIds3 = postsExclude.join(',');
+
+            const url3 = `https://policialpadrao.com.br/wp-json/wp/v2/posts?categories=364&exclude=${excludedIds3}&per_page=3&_embed`;
+
+            try {
+                const response3 = await fetch(url3);
+                if (response3.ok) {
+                    const posts3 = await response3.json();
+                    renderizarPosts3(posts3);
+                } else {
+                    console.error('Erro na requisição:', response3.status);
+                }
+            } catch (error3) {
+                console.error('Erro na requisição:', error3);
+            }
+        }
+
+        // Renderiza os posts no HTML
+        function renderizarPosts3(posts3) {
+            const container3 = document.getElementById('posts-container-3');
+
+            posts3.forEach((post3, index3) => {
+                const postDiv3 = document.createElement('div');
+                postDiv3.classList.add(`linha-${index3 + 1}`);
+
+                // Obtém a imagem em destaque (se existir)
+                const image3 = post3?._embedded?.['wp:featuredmedia']?.[0]?.source_url || '';
+
+                // Obtém as categorias
+                const categories3 = post3?._embedded?.['wp:term']?.[0]
+                    .map((category3) => category3?.name)
+                    .join(' ');
+
+                // Cria elementos HTML para exibir a imagem, categorias e título
+                const imageElement3 = document.createElement('img');
+                imageElement3.src = image3;
+
+                const categoriesElement3 = document.createElement('p');
+                categoriesElement3.textContent = categories3 ? categories3 : '';
+
+                const titleElement3 = document.createElement('h2');
+                titleElement3.textContent = post3?.title?.rendered || '';
+
+                // Cria links em torno da imagem e do título
+                const imageLink3 = document.createElement('a');
+                imageLink3.href = post3.link;
+                imageLink3.target = '_blank';
+                imageLink3.appendChild(imageElement3);
+
+                const titleLink3 = document.createElement('a');
+                titleLink3.href = post3.link;
+                titleLink3.target = '_blank';
+                titleLink3.appendChild(titleElement3);
+
+                // Adiciona os elementos à div do post na ordem desejada
+                postDiv3.appendChild(imageLink3);
+                postDiv3.appendChild(categoriesElement3);
+                postDiv3.appendChild(titleLink3);
+
+                // Adiciona a div do post ao container no HTML
+                container3.appendChild(postDiv3);
+            });
+            addAdvertisementColumn3()
+        }
+
+        // Renderiza o banner de anúncio na coluna 3
+        function addAdvertisementColumn3() {
+            const columnSelector3 = '#posts-container-3';
+            const adContent3 = `
+                <div style="max-width:300px; width:100%; height:100px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19550&t=1685549776" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+            `;
+            $(columnSelector3).append(adContent3);
+
+            criarBotao3();
+        }
+
+        // Cria o botão "mais notícias" na coluna 3
+        function criarBotao3() {
+            var botao = $('<button>', {
+                text: 'mais notícias',
+                class: 'botao-colunas-home',
+                click: function () {
+                    window.location.href = '/noticias-policiais/estado-de-sao-paulo/';
+                }
+            });
+            $('#posts-container-3').append(botao);
+        }
+
+        // Chamada da função para fazer a requisição e renderizar os posts
+        fazerRequisicao3();
+    </script>
+</body>

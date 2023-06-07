@@ -1,0 +1,310 @@
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+</head>
+
+<body>
+  <div id="half-page-banner"></div><script>
+
+    // Renderiza o banner de anúncio sem cidade quando o usuário acessa o site sem permissão de localização
+    function addAdvertisementHalfPageSemCidade() {
+      const bannerSelectorHalfPage = document.getElementById('half-page-banner');
+
+      adContentBannerHalfPage = `
+      <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19987&t=1686068192" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+      `
+
+      $(bannerSelectorHalfPage).append(adContentBannerHalfPage);
+      console.log("Banner HALF-PAGE gerado sem cidade específica");
+    }
+
+    // Renderiza o banner de anúncio referente à cidade do usuário
+    function addAdvertisementHalfPage() {
+      var adContentBannerHalfPage = ``;
+
+      // Redefine a função assim que ela é chamada
+      function addAdvertisementHalfPage() {
+        const bannerSelectorHalfPage = document.getElementById('half-page-banner');
+        $(bannerSelectorHalfPage).empty();
+        $(bannerSelectorHalfPage).append(adContentBannerHalfPage);
+        console.log("Banner HALF-PAGE gerado na cidade: ", cidade)
+      }
+
+      // Série de verificações para encontrar o bloco referente à cidade do usuário
+      if (cidade.toUpperCase() === "AMERICANA") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19941&t=1686066537" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "ARTUR NOGUEIRA") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19942&t=1686066574" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "CAMPINAS") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19943&t=1686066605" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "COSMÓPOLIS") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19944&t=1686066635" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "ENGENHEIRO COELHO") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19945&t=1686066670" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "HOLAMBRA") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19946&t=1686066697" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "HORTOLÂNDIA") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19947&t=1686066725" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "INDAIATUBA") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19948&t=1686066748" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "ITATIBA") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19949&t=1686066780" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "JAGUARIÚNA") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19950&t=1686066807" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "MONTE MOR") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19951&t=1686066837" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "MORUNGABA") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19952&t=1686066864" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "NOVA ODESSA") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19953&t=1686066890" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "PAULÍNIA") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19954&t=1686066918" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "PEDREIRA") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19955&t=1686066944" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "SANTA BÁRBARA D'OESTE") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19956&t=1686066970" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "SANTO ANTÔNIO DE POSSE") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19957&t=1686066998" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "SUMARÉ") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19958&t=1686067028" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "VALINHOS") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19959&t=1686067056" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "VINHEDO") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19960&t=1686067083" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "ÁGUAS DE SÃO PEDRO") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19961&t=1686067111" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "ANALÂNDIA") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19962&t=1686067137" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "ARARAS") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19963&t=1686067162" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "CAPIVARI") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19964&t=1686067183" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "CHARQUEADA") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19965&t=1686067212" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "CONCHAL") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19966&t=1686067259" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "CORDEIRÓPOLIS") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19967&t=1686067285" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "CORUMBATAÍ") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19968&t=1686067321" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "ELIAS FAUSTO") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19969&t=1686067347" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "IPEÚNA") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19970&t=1686067371" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "IRACEMÁPOLIS") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19971&t=1686067402" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "LEME") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19972&t=1686067430" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "LIMEIRA") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19973&t=1686067456" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "MOMBUCA") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19974&t=1686067482" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "PIRACICABA") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19975&t=1686067508" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "PIRASSUNUNGA") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19976&t=1686067538" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "RAFARD") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19977&t=1686067561" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "RIO CLARO") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19978&t=1686067592" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "RIO DAS PEDRAS") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19979&t=1686067617" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "SALTINHO") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19980&t=1686067645" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "SANTA CRUZ DA CONCEIÇÃO") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19981&t=1686067680" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "SANTA GERTRUDES") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19982&t=1686067704" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "SANTA MARIA DA SERRA") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19983&t=1686067739" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      } else if (cidade.toUpperCase() === "SÃO PEDRO") {
+        adContentBannerHalfPage = `
+        <div style="max-width:300px; width:100%; height:600px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19984&t=1686067760" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+        `
+        addAdvertisementHalfPage(adContentBannerHalfPage);
+
+      }
+
+    }
+
+    // Execução no DOM
+    if (cidade) {
+      addAdvertisementHalfPage();
+    } else {
+      addAdvertisementHalfPageSemCidade();
+    }
+
+  </script>
+</body>

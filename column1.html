@@ -1,0 +1,112 @@
+<body>
+  <div id="posts-container-1">
+    <h1>Campinas e Região</h1>
+  </div>
+  
+  <script>
+    // Função para fazer a requisição AJAX
+    // Função para fazer a requisição AJAX
+    async function fazerRequisicao() {
+      // const postsExclude = [36788, 36769, 36748, 36732, 36707]; //Deletar esta linha quando implementar no ambiente de testes...
+      const excludedIds = postsExclude.join(',');
+
+      const url = `https://policialpadrao.com.br/wp-json/wp/v2/posts?categories=367&exclude=${excludedIds}&per_page=3&_embed`;
+
+      try {
+        const response = await fetch(url);
+        if (response.ok) {
+          const posts = await response.json();
+          renderizarPosts(posts);
+        } else {
+          console.error('Erro na requisição:', response.status);
+        }
+      } catch (error) {
+        console.error('Erro na requisição:', error);
+      }
+    }
+
+    // Função para renderizar os posts no HTML
+    function renderizarPosts(posts) {
+      const container = document.getElementById('posts-container-1');
+
+      posts.forEach((post, index) => {
+        const postDiv = document.createElement('div');
+        postDiv.classList.add(`linha-${index + 1}`);
+
+        // Obtém a imagem em destaque (se existir)
+        const image = post?._embedded?.['wp:featuredmedia']?.[0]?.source_url || '';
+
+        // Obtém as categorias
+        const categories = post?._embedded?.['wp:term']?.[0]
+          .map((category) => category?.name)
+          .join(' ');
+
+        // Cria elementos HTML para exibir a imagem, categorias e título
+        const imageElement = document.createElement('img');
+        imageElement.src = image;
+
+        const categoriesElement = document.createElement('p');
+        categoriesElement.textContent = categories ? categories : '';
+
+        const titleElement = document.createElement('h2');
+        titleElement.textContent = post?.title?.rendered || '';
+
+        // Cria links em torno da imagem e do título
+        const imageLink = document.createElement('a');
+        imageLink.href = post.link;
+        imageLink.target = '_blank';
+        imageLink.appendChild(imageElement);
+
+        const titleLink = document.createElement('a');
+        titleLink.href = post.link;
+        titleLink.target = '_blank';
+        titleLink.appendChild(titleElement);
+
+        // Adiciona os elementos à div do post na ordem desejada
+        postDiv.appendChild(imageLink);
+        postDiv.appendChild(categoriesElement);
+        postDiv.appendChild(titleLink);
+
+        // Adiciona a div do post ao container no HTML
+        container.appendChild(postDiv);
+
+        $(document).ready(function () {
+          $('.linha-1').hover(
+            function () {
+              $(this).find('h3').addClass('hovered');
+            },
+            function () {
+              $(this).find('h3').removeClass('hovered');
+            }
+          );
+        });
+
+      });
+      addAdvertisementColumn1();
+    }
+
+    function addAdvertisementColumn1() {
+      const columnSelector1 = '#posts-container-1';
+      const adContent1 = `
+        <div style="max-width:300px; width:100%; height:100px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19526&t=1685548870" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
+      `;
+      $(columnSelector1).append(adContent1);
+      criarBotao1();
+    }
+
+    function criarBotao1() {
+      var botao = $('<button>', {
+        text: 'mais notícias',
+        class: 'botao-colunas-home',
+        click: function () {
+          window.location.href = '/noticias-policiais/campinas-regiao/';
+        }
+      });
+
+      $('#posts-container-1').append(botao);
+    }
+
+    // Chamada da função para fazer a requisição e renderizar os posts
+    fazerRequisicao();
+  </script>
+</body>

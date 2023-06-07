@@ -1,0 +1,17 @@
+<script>
+  function removerAcentos(str) {
+    // Remove acentos
+    str = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    // Remove o caractere de apóstrofo (')
+    str = str.replace(/'/g, "");
+
+    return str;
+  }
+
+  // Exemplo de uso
+  var textoAcentuado = "Santo Antônio de Posse";
+  var textoSemAcento = removerAcentos(textoAcentuado).toLowerCase().replace(/\s+/g, "-");
+  console.log(textoSemAcento);
+
+</script>

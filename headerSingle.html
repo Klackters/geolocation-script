@@ -1,20 +1,16 @@
 <head>
-
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC0byff37xRbOlSAhIbW_jSTjiOr6owamM&libraries=places"></script>
-
 </head>
 
 <body>
-
-  <div class="header-banner-geolocation-container">
-
-  </div>
-
+  <div class="header-banner-geolocation-container"></div>
   <script>
 
+    // Define variável global
+    var cidade = "";
+
+    // Verifica se a cidade está armazenada nos cookies
     async function fetchCity() {
 
       var cidadeCookie = Cookies.get('cidade');
@@ -22,37 +18,7 @@
       adBannerRenderWithoutCity();
 
       if (!cidadeCookie) {
-
-        if (navigator.geolocation) {
-
-          navigator.geolocation.getCurrentPosition(async function (position) {
-
-            console.log("API da Google FOI utilizada");
-
-            var geocoder = new google.maps.Geocoder();
-            var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-            geocoder.geocode({ 'latLng': latLng }, function (results, status) {
-              if (status == google.maps.GeocoderStatus.OK) {
-
-                if (results[0]) {
-                  cidade = results[0].address_components[3].long_name;
-                  Cookies.set('cidade', cidade);
-                  adBannerRender();
-                } else {
-                  console.log("Nenhum resultado encontrado.");
-                  adBannerRenderWithoutCity();
-                }
-              } else {
-                console.log("Geocoder falhou devido a: " + status);
-                adBannerRenderWithoutCity();
-              }
-            });
-          }, function (error) {
-            console.log("Erro ao obter a localização: " + error.message);
-            adBannerRenderWithoutCity();
-          });
-        }
+        obterCidade();
       } else {
         console.log("API da Google NÃO FOI utilizada")
         cidade = cidadeCookie;
@@ -60,36 +26,58 @@
       }
     }
 
+    // Envia requisição à API Mapbox e retorna a cidade do usuário
+    function obterCidade() {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+          const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=pk.eyJ1IjoiYnJlbm9kbXgiLCJhIjoiY2xpajh0N2MzMDUyODNsbGc2dTJyOTE3cyJ9.6XjNOwVMR5aO5i9qPVWevw`;
 
+          fetch(url)
+            .then(response => response.json())
+            .then(data => {
+              cidade = data.features[0].context.find(context => context.id.startsWith('place')).text;
+              Cookies.set('cidade', cidade);
+              console.log(cidade);
+              // Funções a serem recarregadas quando o usuário permitir acesso à localização
+              addAdvertisementFooter();
+              addAdvertisementHalfPage();
+            })
+            .catch(error => {
+              console.error("Erro ao obter a cidade:", error);
+              adBannerRenderWithoutCity();
+            });
+        });
+      } else {
+        console.log("Geolocalização não suportada");
+        adBannerRenderWithoutCity();
+      }
+    }
 
-    fetchCity();
-
-    // Header banner
-
-    function adBannerRenderWithoutCity(){
+    // Renderiza o banner de anúncio sem cidade quando o usuário acessa o site sem permissão de localização
+    function adBannerRenderWithoutCity() {
       const bannerSelectorHeader = '.header-banner-geolocation-container';
       const adContentBannerHeader = `
       <div style="max-width:970px; width:100%; height:250px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19486&t=1685705096" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
       `
-
       $(bannerSelectorHeader).empty();
-
       $(bannerSelectorHeader).append(adContentBannerHeader);
       console.log("Banner sem cidade renderizado");
     }
 
-    function adBannerRender(){
-
+    // Limpa (reseta) e renderiza o banner de anúncio do Header baseado na cidade do usuário
+    function adBannerRender() {
       var adContentBannerHeader = ``;
-
+      const bannerSelectorHeader = '.header-banner-geolocation-container';
+      $(bannerSelectorHeader).empty();
       function addAdvertisement() {
-        const bannerSelectorHeader = '.header-banner-geolocation-container';
         $(bannerSelectorHeader).empty();
         $(bannerSelectorHeader).append(adContentBannerHeader);
-        console.log("Banner do header gerado na cidade: ", cidade)
+        console.log("Banner do header gerado na cidade: ", cidade);
       }
 
-
+      // Série de verificações para encontrar o bloco referente à cidade do usuário
       if (cidade.toUpperCase() === "AMERICANA") {
         adContentBannerHeader = `
         <div style="max-width:970px; width:100%; height:250px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19628&t=1685714948" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
@@ -353,10 +341,11 @@
         <div style="max-width:970px; width:100%; height:250px;"><iframe src="https://policial.dmxdesign.com.br?_dnid=19670&t=1685717659" border="0" scrolling="no" allowtransparency="true" style="width:1px;min-width:100%;*width:100%;height:100%;border:0;"></iframe></div>
         `
         addAdvertisement(adContentBannerHeader);
-
       }
     }
 
+    // Primeira chamada de função no DOM
+    fetchCity();
+
   </script>
 </body>
-
