@@ -2,14 +2,12 @@
   <div id="posts-container-1">
     <h1>Campinas e Região</h1>
   </div>
-  
+
   <script>
     // Função para fazer a requisição AJAX
-    // Função para fazer a requisição AJAX
     async function fazerRequisicao() {
-      // const postsExclude = [36788, 36769, 36748, 36732, 36707]; //Deletar esta linha quando implementar no ambiente de testes...
-      const excludedIds = postsExclude.join(',');
 
+      const excludedIds = postsExclude.join(',');
       const url = `https://policialpadrao.com.br/wp-json/wp/v2/posts?categories=367&exclude=${excludedIds}&per_page=3&_embed`;
 
       try {
@@ -25,7 +23,7 @@
       }
     }
 
-    // Função para renderizar os posts no HTML
+    // Renderiza os posts no HTML
     function renderizarPosts(posts) {
       const container = document.getElementById('posts-container-1');
 
@@ -85,6 +83,7 @@
       addAdvertisementColumn1();
     }
 
+    // Renderiza o banner de anúncio na coluna 1
     function addAdvertisementColumn1() {
       const columnSelector1 = '#posts-container-1';
       const adContent1 = `
@@ -94,6 +93,7 @@
       criarBotao1();
     }
 
+    // Cria o botão "mais notícias" no fim da coluna
     function criarBotao1() {
       var botao = $('<button>', {
         text: 'mais notícias',
